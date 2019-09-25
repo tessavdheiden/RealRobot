@@ -19,18 +19,18 @@ class GPS:
         if message['data']:
             for k, v in message['data'].items():
                 if k == 'longitude':
-                    self.longitude = v
+                    self.longitude = float(v)
                 if k == 'latitude':
-                    self.latitude = v
+                    self.latitude = float(v)
                 if not self.is_ready:
                     self.is_ready = True
 
-    def __init__(self) -> None:
+    def __init__(self, active_player) -> None:
         super().__init__()
+        self.active_player = active_player
         self.longitude = None
         self.latitude = None
         self.is_ready = False
-        self.db.child('gps').stream(self.stream_handler)
+        self.db.child(active_player).stream(self.stream_handler)
 
-gps_tracker = GPS()
 

@@ -90,19 +90,20 @@ while True:
     time.sleep(0.05)
     print(distance)
     
-    print("s-stop e-exit")
+    print("s-stop e-exit r-run")
     x = input()
     if x=='e':
         GPIO.cleanup()
         print("GPIO Clean up")
     elif x=='s':
-        stop();
-    
-    if distance >= 30:
-        forward_fast()
-    elif 30 > distance > 10:
-        forward_slow()
-    elif 10 >= distance > 5:
         stop()
-    elif distance <= 5:
-        backward()
+    elif x=='r':
+        distance = get_distance()
+        if distance >= 30:
+            forward_fast()
+        elif 30 > distance > 10:
+            forward_slow()
+        elif 10 >= distance > 5:
+            stop()
+        elif distance <= 5:
+            backward()

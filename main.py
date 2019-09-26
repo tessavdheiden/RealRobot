@@ -2,6 +2,8 @@ import time
 import argparse
 
 from gps import GPS
+from controller import Controller
+import ultra_sound_drive
 
 parser = argparse.ArgumentParser('Parse configuration file')
 parser.add_argument('human1', default=False, action='store_false')
@@ -11,7 +13,11 @@ parser.add_argument('human4', default=False, action='store_false')
 parser.add_argument('human5', default=False, action='store_false')
 args = parser.parse_args()
 
-FPS = 4
+FPS_EPISODE = 4
+FPS_CONTROLLER = 25
+
+controller = Controller()
+
 last_frame_time = 0
 robot_gps = GPS('robot')
 human1_gps = None
@@ -46,7 +52,7 @@ human4_latitude = 0.0
 human5_longitude = 0.0
 human5_latitude = 0.0
 
-key = input('Do you want to start the episode? (y/n)')
+key = input('Do you want to start the episode (y/n)?')
 
 if key == 'y':
     while True:
@@ -79,4 +85,16 @@ if key == 'y':
                     human5_longitude = human5_gps.longitude - init_longitude
                     human5_latitude = human5_gps.latitude - init_latitude
 else:
-    print('Episode is not started!')
+    print('Episode is not started! Robot can be driven by Controller')
+    while True:
+        current_time = time.time()
+        last_frame_time = current_time
+
+        sleep_time = 1./25 - (current_time - last_frame_time)
+        if sleep_time > 0:
+            time.sleep(sleep_time)
+        if controller.is_ready:
+            if controller.a:
+                ultra_sound_drive.forward_fast()
+            if controller.b:
+                ultra_sound_drive.backward()

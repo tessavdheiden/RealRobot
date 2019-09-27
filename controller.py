@@ -22,12 +22,13 @@ class Controller:
                     self.a = v
                 if k == 'bBtn':
                     self.b = v
+                if k == 'joystick-degree':
+                    self.degree = v
                 if not self.is_ready:
                     self.is_ready = True
 
-    def __init__(self, active_player) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.active_player = active_player
         self.a = False
         self.b = False
         self.degree = 0.0

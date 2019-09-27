@@ -3,7 +3,7 @@ import argparse
 
 from gps import GPS
 from controller import Controller
-import ultra_sound_drive
+#import ultra_sound_drive
 
 parser = argparse.ArgumentParser('Parse configuration file')
 parser.add_argument('human1', default=False, action='store_false')
@@ -95,6 +95,10 @@ else:
             time.sleep(sleep_time)
         if controller.is_ready:
             if controller.a:
-                ultra_sound_drive.forward_fast()
+                #ultra_sound_drive.forward_fast()
+                print("A pressed")
             if controller.b:
-                ultra_sound_drive.backward()
+                #ultra_sound_drive.backward()
+                print("B pressed")
+            if controller.degree:
+                print("Degree" + str(controller.degree))

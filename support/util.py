@@ -1,7 +1,9 @@
 import math
 
 def GPStoCartesian(longitude, latitude):
-    r = 6371 * 10**6
+    longitude = longitude / 180 * math.pi
+    latitude = latitude / 180 * math.pi
+    r = 6371 * 10**3
     x = r * math.cos(latitude) * math.cos(longitude)
     y = r * math.cos(latitude) * math.sin(longitude)
     return (x, y)

@@ -24,6 +24,9 @@ init_latitude = None
 robot_longitude = 0.0
 robot_latitude = 0.0
 
+init_robot_x = None
+init_robot_y = None
+
 def main():
     while True:
         key = input('Do you want to start episode mode? (y/n)')
@@ -43,14 +46,16 @@ def main():
                         if not init_longitude or not init_latitude:
                             init_longitude = robot_gps.longitude
                             init_latitude = robot_gps.latitude
+                            (init_robot_x, init_robot_y) = util.GPStoCartesian(init_longitude, init_latitude)
                             last_pos_x = 0.0
                             last_pos_y = 0.0
                         else:
-                            robot_longitude = robot_gps.longitude - init_longitude
-                            robot_latitude = robot_gps.latitude - init_latitude
+                            robot_longitude = robot_gps.longitude
+                            robot_latitude = robot_gps.latitude
 
                             pos_x, pos_y = util.GPStoCartesian(robot_longitude, robot_latitude)
                             vel_x, vel_y = util.CartesianSpeed(pos_x, pos_y, last_pos_x, last_pos_y)
+                            (pos_x, pos_y) = (pos_x - init_robot_x, pos_y - init_robot_y)
 
                             episode.incrementStepNumber()
                             episode.setPositions(pos_x, pos_y)
@@ -59,7 +64,7 @@ def main():
                             last_pos_x = pos_x
                             last_pos_y = pos_y
 
-                            if episode.step_number == 50:
+                            if episode.step_number == 2400:
                                 episode.uploadToServer()
                                 break
                     # if episode.episode_ended:

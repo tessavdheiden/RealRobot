@@ -1,6 +1,6 @@
 import time
 from gpiozero import Motor
-from gps import GPS
+from support.gps import GPS
 
 # ------- CONTROL -------
 LON_RANGE = 10

@@ -15,6 +15,12 @@ class GPS:
 
     db = firebase.database()
 
+    def getCurrentGPS(self):
+        lat = self.db.child(self.active_player).child('latitude').get().val()
+        lon = self.db.child(self.active_player).child('longitude').get().val()
+        self.longitude = lon
+        self.latitude = lat
+
     def stream_handler(self, message):
         if message['data']:
             for k, v in message['data'].items():
@@ -31,6 +37,7 @@ class GPS:
         self.longitude = None
         self.latitude = None
         self.is_ready = False
+        self.getCurrentGPS()
         self.db.child(active_player).stream(self.stream_handler)
 
 

@@ -1,7 +1,6 @@
 import math
 import time
-from gps import GPS
-from gpiozero import Motor
+from support.gps import GPS
 
 v_m = 0.1  # average-speed in m/s +++ for this first attempt the average-speed is a constant (it will depend on action)
 FPS = 5  # ???

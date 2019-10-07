@@ -1,6 +1,7 @@
 import time
 import support.firebase as fbdb
 import support.util as util
+import support.ultra_sound_drive as ultra_sound_drive
 
 from support.gps import GPS
 from support.controller import Controller
@@ -94,12 +95,13 @@ def main():
                     time.sleep(sleep_time)
                 if controller.is_ready:
                     if controller.a:
-                        #ultra_sound_drive.forward_fast()
+                        ultra_sound_drive.forward_fast()
                         print("A pressed")
                     if controller.b:
-                        #ultra_sound_drive.backward()
+                        ultra_sound_drive.backward()
                         print("B pressed")
                     if controller.degree:
                         print("Degree" + str(controller.degree))
+
 
 main()

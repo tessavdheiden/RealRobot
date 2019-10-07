@@ -50,7 +50,12 @@ class Episode:
     def setStreamer(self):
         self.db.child('currentEpisode').stream(self.episode_stream_handler)
 
-    def uploadToServer(self):
+    def uploadToServer(self, ending_message):
+        self.db.child('currentEpisode').update({
+            'episodeEnded': ending_message,
+            'episodeStarted': False
+        })
+
         self.db.child('memories').child('IL').child(self.key).update({
             'positions_x': self.positions_x,
             'positions_y': self.positions_y,
@@ -58,7 +63,8 @@ class Episode:
             'velocities_y': self.velocities_y,
             'thetas': self.thetas,
             'goal_x': self.goal_x,
-            'goal_y': self.goal_y
+            'goal_y': self.goal_y,
+            'episodeEnded': ending_message
         })
 
 

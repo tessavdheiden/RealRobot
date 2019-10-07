@@ -25,6 +25,7 @@ if load_value_network:
 
 last_frame_time = 0
 robot_gps = GPS('robot')
+gamma = 0.9
 
 init_longitude = None
 init_latitude = None
@@ -72,10 +73,18 @@ def main():
                             pos_x, pos_y = util.GPStoCartesian(robot_longitude, robot_latitude)
                             vel_x, vel_y = util.CartesianSpeed(pos_x, pos_y, last_pos_x, last_pos_y)
                             (pos_x, pos_y) = (pos_x - init_robot_x, pos_y - init_robot_y)
+                            reward = 0.0
+                            if episode.checkGoalReached(pos_x=pos_x, pos_y=pos_y):
+                                reward = 1.0
 
                             episode.incrementStepNumber()
                             episode.setPositions(pos_x, pos_y)
                             episode.setVelocities(vel_x, vel_y)
+                            episode.setReward(reward=reward)
+
+                            if reward:
+                                episode.uploadToServer(ending_message='Reach Goal')
+                                break
 
                             last_pos_x = pos_x
                             last_pos_y = pos_y

@@ -12,6 +12,7 @@ class Episode:
         self.positions_y = []
         self.velocities_x = []
         self.velocities_y = []
+        self.rewards = []
         self.actions = []
         self.thetas = []
         self.goal_x = None
@@ -31,6 +32,16 @@ class Episode:
         self.velocities_x.append(vel_x)
         self.velocities_y.append(vel_y)
         #self.thetas.append(math.atan(vel_y, vel_x))
+
+    def setReward(self, reward):
+        self.rewards.append(reward)
+
+    def checkGoalReached(self, pos_x, pos_y):
+        #Use Pythagoras to get a zone for robot to enter
+        if ((self.goal_x - pos_x) ** 2 + (self.goal_y - pos_y) ** 2) ** 0.5 < 0.5:
+            return True
+        else:
+            return False
 
     def episode_stream_handler(self, message):
         if message['data']:

@@ -14,6 +14,8 @@ class Trainer:
         self.memory = ReplayMemory(capacity=10000)
         self.batch_size = batch_size
         self.epochs = 50
+        self.learning_rate = 0.01
+        #self.model = ValueNetwork()
         self.device = device
         self.db = fbdb.db
         self.data_loader = None
@@ -77,7 +79,11 @@ class Trainer:
             for data in self.data_loader:
                 states = data
                 states = Variable(states).to(self.device)
-
+                self.optimizer_policy_model.zero_grad()
+                outputs = self.policy_model(states)
+                loss = self.criterion_v(outputs, rewards)
+                loss.backward()
+                self.optimizer_policy_model.step()
                 losses += 1
 
             logging.info('Epoch: {}, Loss: {}, Time: {}', e, losses, time.time() - start_time)

@@ -67,9 +67,15 @@ class Episode:
             'episodeStarted': False
         })
 
+        values = []
+        for i, reward in enumerate(self.rewards):
+            values.append(sum([pow(self.gamma, max(t - i, 0) * self.robot.time_step * self.robot.v_pref) * reward
+             * (1 if t >= i else 0) for t, reward in enumerate(self.rewards)]))
+
         self.db.child('memories').child('IL').child(self.key).update({
             'positions_x': self.positions_x,
             'positions_y': self.positions_y,
+            'rewards': values,
             'velocities_x': self.velocities_x,
             'velocities_y': self.velocities_y,
             'thetas': self.thetas,

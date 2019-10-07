@@ -5,6 +5,7 @@ import support.util as util
 from support.gps import GPS
 from support.controller import Controller
 from model.episode import Episode
+from model.model import ValueNetwork
 
 #import ultra_sound_drive
 
@@ -12,8 +13,13 @@ db = fbdb.db
 
 FPS_EPISODE = 2
 FPS_CONTROLLER = 25
+TIME_OUT_TIME = 25
 
 controller = Controller()
+
+# load state dict to model
+# value_network = ValueNetwork()
+# value_network.load_state_dict()
 
 last_frame_time = 0
 robot_gps = GPS('robot')
@@ -64,13 +70,9 @@ def main():
                             last_pos_x = pos_x
                             last_pos_y = pos_y
 
-                            if episode.step_number == 2400:
-                                episode.uploadToServer()
+                            if episode.step_number == TIME_OUT_TIME * FPS_EPISODE:
+                                episode.uploadToServer(ending_message='Timeout')
                                 break
-                    # if episode.episode_ended:
-                    #     episode.uploadToServer()
-                    #     print('Episode ended')
-                    #     break
                 else:
                     time.sleep(0.5)
         else:

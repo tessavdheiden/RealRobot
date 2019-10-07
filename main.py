@@ -7,19 +7,20 @@ from support.controller import Controller
 from model.episode import Episode
 from model.model import ValueNetwork
 
-#import ultra_sound_drive
-
 db = fbdb.db
 
 FPS_EPISODE = 2
 FPS_CONTROLLER = 25
 TIME_OUT_TIME = 25
 
+load_value_network = False
+mode = None
+
 controller = Controller()
 
-# load state dict to model
-# value_network = ValueNetwork()
-# value_network.load_state_dict()
+value_network = ValueNetwork()
+if load_value_network:
+    value_network.load_state_dict()
 
 last_frame_time = 0
 robot_gps = GPS('robot')
@@ -35,12 +36,20 @@ init_robot_y = None
 
 def main():
     while True:
-        key = input('Do you want to start episode mode? (y/n)')
-        if key == 'y':
+        if not mode:
+            key = input('Do you want to start episode mode or free mode? (e/f)')
+            if key == 'e':
+                mode = 'EpisodeMode'
+                print('Episode Mode activated')
+            elif key == 'f':
+                mode = 'FreeMode'
+                print('Free Mode activated; Robot can be driven with the joystick')
+            else:
+                print('Non Buenos mode activated; Please try again')
+        if mode == 'EpisodeMode':
             episode = Episode()
             init_longitude = None
             init_latitude = None
-            #listener
             while True:
                 if episode.episode_started:
                     print('Episode is started!' + str(episode.step_number))
@@ -75,8 +84,7 @@ def main():
                                 break
                 else:
                     time.sleep(0.5)
-        else:
-            print('Episode is not started! Robot can be driven by Controller')
+        if mode == 'FreeMode':
             while True:
                 current_time = time.time()
                 last_frame_time = current_time

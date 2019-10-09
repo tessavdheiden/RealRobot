@@ -48,13 +48,13 @@ class Episode:
             for k, v in message['data'].items():
                 if k == 'episodeStarted':
                     self.episode_started = bool(v)
-                if k == 'goalPosX':
+                elif k == 'goalPosX':
                     self.goal_x = float(v)
-                if k == 'goalPosY':
+                elif k == 'goalPosY':
                     self.goal_y = float(v)
-                if k == 'episodeEnded':
+                elif k == 'episodeEnded':
                     self.episode_ended = str(v)
-                if k == 'key':
+                elif k == 'key':
                     self.key = str(v)
 
 

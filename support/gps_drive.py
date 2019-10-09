@@ -1,6 +1,16 @@
 import time
-from gpiozero import Motor
+#from gpiozero import Motor
+from support.gpio_sim import Motor
 from support.gps import GPS
+
+from enum import Enum
+
+
+class Go(Enum):
+    STOP = 0
+    FORWARD = 1
+    BACKWARD = 2
+
 
 # ------- CONTROL -------
 LON_RANGE = 10
@@ -64,5 +74,18 @@ def joystick_drive(angle: float, forward: bool, backward: bool):
         motor1.stop()
         motor2.stop()
     
+def nn_drive(motorLeft: float, motorRight: float, Mode : Go=0):
+    if Mode == 1:
+        motor1.forward(motorLeft)
+        motor2.forward(motorRight)
+    elif Mode == 2:
+        motor1.backward(motorLeft)
+        motor2.backward(motorRight)
+    else:
+        motor1.stop()
+        motor2.stop()
+
+
+
 
 

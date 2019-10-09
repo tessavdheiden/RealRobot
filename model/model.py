@@ -5,18 +5,17 @@ import torch.nn.functional as F
 import support.mlp as mlp
 
 class ValueNetwork(nn.Module):
-    def __init__(self, input_dim, self_state_dim, mlp1_dims, mlp2_dims, mlp3_dims, attention_dims, with_global_state,
-                 cell_size, cell_num):
+    def __init__(self, self_state_dim, mlp1_dims, mlp2_dims, mlp3_dims, attention_dims, cell_size, cell_num):
         super().__init__()
         self.self_state_dim = self_state_dim
         self.global_state_dim = mlp1_dims[-1]
         self.mlp1 = mlp(input_dim, mlp1_dims, last_relu=True)
         self.mlp2 = mlp(mlp1_dims[-1], mlp2_dims)
-        self.with_global_state = with_global_state
-        if with_global_state:
-            self.attention = mlp(mlp1_dims[-1] * 2, attention_dims)
-        else:
-            self.attention = mlp(mlp1_dims[-1], attention_dims)
+#        self.with_global_state = with_global_state
+#        if with_global_state:
+#            self.attention = mlp(mlp1_dims[-1] * 2, attention_dims)
+#        else:
+        self.attention = mlp(mlp1_dims[-1], attention_dims)
         self.cell_size = cell_size
         self.cell_num = cell_num
         mlp3_input_dim = mlp2_dims[-1] + self.self_state_dim
@@ -35,14 +34,14 @@ class ValueNetwork(nn.Module):
         mlp1_output = self.mlp1(state.view((-1, size[2])))
         mlp2_output = self.mlp2(mlp1_output)
 
-        if self.with_global_state:
-            # compute attention scores
-            global_state = torch.mean(mlp1_output.view(size[0], size[1], -1), 1, keepdim=True)
-            global_state = global_state.expand((size[0], size[1], self.global_state_dim)).\
-                contiguous().view(-1, self.global_state_dim)
-            attention_input = torch.cat([mlp1_output, global_state], dim=1)
-        else:
-            attention_input = mlp1_output
+#        if self.with_global_state:
+#            # compute attention scores
+#            global_state = torch.mean(mlp1_output.view(size[0], size[1], -1), 1, keepdim=True)
+#            global_state = global_state.expand((size[0], size[1], self.global_state_dim)).\
+#                contiguous().view(-1, self.global_state_dim)
+#            attention_input = torch.cat([mlp1_output, global_state], dim=1)
+#        else:
+        attention_input = mlp1_output
         scores = self.attention(attention_input).view(size[0], size[1], 1).squeeze(dim=2)
 
         # masked softmax

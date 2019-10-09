@@ -2,12 +2,11 @@ import time
 import support.firebase as fbdb
 import support.util as util
 import support.gps_drive as gps_drive
-import support.ultra_sound_drive as ultra_sound_drive
 
 from support.gps import GPS
 from support.controller import Controller
 from model.episode import Episode
-from model.model import ValueNetwork
+#from model.model import ValueNetwork
 
 db = fbdb.db
 
@@ -19,7 +18,8 @@ load_value_network = False
 
 controller = Controller()
 
-#value_network = ValueNetwork()
+#value_network = ValueNetwork(self_state_dim=8, mlp1_dims=[8, 100, 150], mlp2_dims=[150, 150], mlp3_dims=[150, 100, 64, 16, 1],
+#                 attention_dims=150, cell_size=1, cell_num=4)
 #if load_value_network:
 #    value_network.load_state_dict()
 
@@ -81,6 +81,8 @@ def main(mode=None):
                             if reward:
                                 episode.uploadToServer(ending_message='Reach Goal')
                                 break
+                            
+                            #get next action from firebase
 
                             last_pos_x = pos_x
                             last_pos_y = pos_y
@@ -96,6 +98,7 @@ def main(mode=None):
                 if sleep_time > 0:
                     time.sleep(sleep_time)
                 if controller.is_ready:
+                    print(controller.a, controller.b, controller.degree)
                     gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
 
 

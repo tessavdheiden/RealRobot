@@ -5,41 +5,17 @@ GPIO.setwarnings(False)
 GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
 
-# ULTRA SOUND
-TRIG = 4
-ECHO = 18
-
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
-
-
-def get_distance():
-    GPIO.output(TRIG, True)
-    time.sleep(0.00001)
-    GPIO.output(TRIG, False)
-
-    while GPIO.input(ECHO) == False:
-        start = time.time()
-
-    while GPIO.input(ECHO) == True:
-        end = time.time()
-
-    sig_time = end-start
-
-    #CM:
-    distance = sig_time / 0.000058
-    return distance
-
 # DRIVE
 in1 = 24
-in2 = 23
+in2 = 27
 
 in3 = 17
-in4 = 27
+in4 = 23
 
 en = 25
 temp1=1
 
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(in1,GPIO.OUT)
 GPIO.setup(in2,GPIO.OUT)
 GPIO.setup(en,GPIO.OUT)
@@ -86,9 +62,7 @@ def backward():
     GPIO.output(in4,GPIO.HIGH)
 
 while True:
-    distance = get_distance()
     time.sleep(0.05)
-    print(distance)
     
     print("s-stop e-exit r-run")
     x = input()
@@ -98,12 +72,35 @@ while True:
     elif x=='s':
         stop()
     elif x=='r':
-        distance = get_distance()
-        if distance >= 30:
+        print("f-forward b-backward")
+        x = input()
+        
+        if x == 'f':
             forward_fast()
-        elif 30 > distance > 10:
-            forward_slow()
-        elif 10 >= distance > 5:
-            stop()
-        elif distance <= 5:
+        elif x == 'b':
             backward()
+
+# ULTRA SOUND
+TRIG = 4
+ECHO = 18
+
+GPIO.setup(TRIG,GPIO.OUT)
+GPIO.setup(ECHO,GPIO.IN)
+
+
+def get_distance():
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+
+    while GPIO.input(ECHO) == False:
+        start = time.time()
+
+    while GPIO.input(ECHO) == True:
+        end = time.time()
+
+    sig_time = end-start
+
+    #CM:
+    distance = sig_time / 0.000058
+    return distance

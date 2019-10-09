@@ -37,7 +37,7 @@ class Episode:
         self.rewards.append(reward)
 
     def checkGoalReached(self, pos_x, pos_y):
-        #Use Pythagoras to get a zone for robot to enter
+        #Use Pythagoras to get a zone for robot to enter -> Inaccuracy of GPS
         if ((self.goal_x - pos_x) ** 2 + (self.goal_y - pos_y) ** 2) ** 0.5 < 0.5:
             return True
         else:

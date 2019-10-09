@@ -45,6 +45,20 @@ def rot_clock():
 def rot_counter_clock():
     motor2.forward(.5)
     motor1.backward(.5)
+
+def joystick_drive(angle: float, forward: bool, backward: bool):
+    motor_left = 0.5
+    motor_right = 0.5
+    if angle < 0.0:
+        motor_left -= abs(angle) * 0.5 / 3.14
+    elif angle > 0.0:
+        motor_right -= abs(angle) * 0.5 / 3.14
+    if forward:
+        motor1.forward(motor_left)
+        motor2.forward(motor_right)
+    elif backward:
+        motor1.backward(motor_left)
+        motor2.backward(motor_right)
     
 key = input('Do you want to start the episode? (y/n)')
 

@@ -78,13 +78,14 @@ class Trainer:
             losses = 0
             for data in self.data_loader:
                 states = data
-                states = Variable(states).to(self.device)
-                self.optimizer_policy_model.zero_grad()
-                outputs = self.policy_model(states)
-                loss = self.criterion_v(outputs, rewards)
-                loss.backward()
-                self.optimizer_policy_model.step()
-                losses += 1
+                # states = Variable(states).to(self.device)
+                # self.optimizer_policy_model.zero_grad()
+                # outputs = self.policy_model(states)
+                # loss = self.criterion_v(outputs, rewards)
+                # loss.backward()
+                # self.optimizer_policy_model.step()
+                # losses += 1
+                print(states)
 
             logging.info('Epoch: {}, Loss: {}, Time: {}', e, losses, time.time() - start_time)
 trainer = Trainer(1000, 'cpu')

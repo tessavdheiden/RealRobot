@@ -11,7 +11,7 @@ from model.episode import Episode
 
 db = fbdb.db
 
-FPS_EPISODE = 2
+FPS_EPISODE = 0.5
 FPS_CONTROLLER = 10
 TIME_OUT_TIME = 25
 
@@ -58,6 +58,7 @@ def main(mode=None):
             if key == 'y':
                 db.child('currentEpisode').remove()
                 while True:
+
                     #check for phones connected
                     #main_robot_device = db.child('currentEpisode')
                     #humans = db.child('humans')
@@ -70,12 +71,25 @@ def main(mode=None):
                             break
                     if key == 'r':
                         db.child('currentEpisode').remove()
+                i = 0
                 while True:
                     if episode.episode_started:
                         if episode.step_number % 10 == 0:
                             print('Current TimeStep is: {}', episode.step_number)
                         sleep_time = 1. / FPS_EPISODE
                         time.sleep(sleep_time)
+                        #Testcodesnipped; can be deleted later.
+                        # l =  [[0.3, 0.4],
+                        #       [0.4, 0.3],
+                        #       [0.5, 0.5],
+                        #       [0.1, 0.6]
+                        #       ]
+                        # if i == len(l):
+                        #     i = 0
+                        # print(l[i])
+                        # db.child('currentEpisode').child('action').update({'vx': l[i][0], 'vy': l[i][1]})
+                        # i += 1
+
                         if not init_longitude or not init_latitude:
                             init_longitude = robot_gps.longitude
                             init_latitude = robot_gps.latitude
@@ -106,7 +120,7 @@ def main(mode=None):
                                 episode.uploadToServer(ending_message='Reach Goal')
                                 break
 
-                            #get next action from firebase
+                            #Todo: get next action from firebase
 
                             last_pos_x = robot_pos_x
                             last_pos_y = robot_pos_y

@@ -43,6 +43,24 @@ class Episode:
         else:
             return False
 
+    def resetEpisode(self):
+        self.key = self.getANewDBKey()
+        self.step_number = 0
+        self.episode_started = False
+        self.episode_ended = None
+        self.positions_x = []
+        self.positions_y = []
+        self.velocities_x = []
+        self.velocities_y = []
+        self.rewards = []
+        self.actions = []
+        self.thetas = []
+        self.goal_x = None
+        self.goal_y = None
+
+    def getANewDBKey(self):
+        return self.db.child('memories').child('IL').generate_key()
+
     def episode_stream_handler(self, message):
         if message['data']:
             for k, v in message['data'].items():

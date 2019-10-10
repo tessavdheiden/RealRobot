@@ -5,7 +5,7 @@ import support.util as util
 from model.episode import Episode
 from support.gps_drive import Go, nn_drive
 
-
+ACTION_FPS = 2
 
 def main():
     db = fbdb.db
@@ -38,7 +38,8 @@ def main():
 
             print("vx = {}, vy = {}".format(vx, vy))
             nn_drive(motorLeft, motorRight, mode)
-            time.sleep(1)
+            time.sleep(1 / ACTION_FPS)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()

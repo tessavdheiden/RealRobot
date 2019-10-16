@@ -2,9 +2,37 @@ import time
 #from gpiozero import Motor
 from support.gpio_sim import Motor
 from support.gps import GPS
-
+import RPi.GPIO as GPIO
 from enum import Enum
 
+in1b = 24
+in2b = 23
+enb = 12
+in1a = 27
+in2a = 17
+ena = 13
+
+GPIO.cleanup()
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup
+
+GPIO.setup(in1b, GPIO.OUT)
+GPIO.setup(in2b, GPIO.OUT)
+GPIO.setup(enb, GPIO.OUT)
+GPIO.setup(in1a, GPIO.OUT)
+GPIO.setup(in2a, GPIO.OUT)
+GPIO.setup(ena, GPIO.OUT)
+
+GPIO.output(in1a, GPIO.LOW)
+GPIO.output(in2a, GPIO.LOW)
+GPIO.output(in1b, GPIO.LOW)
+GPIO.output(in2b, GPIO.LOW)
+pa = GPIO.PWM(ena, 1000)
+pb = GPIO.PWM(enb, 1000)
+
+pa.start(100)
+pb.start(100)
 
 class Go(Enum):
     STOP = 0
@@ -29,18 +57,30 @@ robot_latitude = 0.0
 
 # ------- DRIVE -------
 
-motor1 = Motor(23, 24)
-motor2 = Motor(17, 27)
+# motor1 = Motor(23, 24)
+# motor2 = Motor(17, 27)
 
-def fwd():
-    motor1.forward(.75)
-    motor2.forward(.75)
+def fwd(vl,vr):
+    pa.start(vl)
+    pb.start(vr)
+    GPIO.output(in1b, GPIO.HIGH)
+    GPIO.output(in2b, GPIO.LOW)
+    GPIO.output(in1a, GPIO.HIGH)
+    GPIO.output(in2a, GPIO.LOW)
 
-def bwd():
-    motor1.backward(.75)
-    motor2.backward(.75)
+def bwd(vl,vr):
+    pa.start(vl)
+    pb.start(vr)
+    GPIO.output(in1b, GPIO.LOW)
+    GPIO.output(in2b, GPIO.HIGH)
+    GPIO.output(in1a, GPIO.LOW)
+    GPIO.output(in2a, GPIO.HIGH)
 
-def left():
+def stop():
+    pa.start(0)
+    pb.start(0)
+
+""" def left():
     motor1.forward(.75)
     motor2.forward(.5)
     
@@ -54,36 +94,30 @@ def rot_clock():
 
 def rot_counter_clock():
     motor2.forward(.5)
-    motor1.backward(.5)
+    motor1.backward(.5) """
 
 def joystick_drive(angle: float, forward: bool, backward: bool):
-    motor_left = 1.0
-    motor_right = 1.0
+    motor_left = 100
+    motor_right = 100
     if angle < 0.0:
-        motor_left -= abs(angle) * 1.0 / 3.14
+        motor_left -= abs(angle) * 100 / 3.14
     elif angle > 0.0:
-        motor_right -= abs(angle) * 1.0 / 3.14
+        motor_right -= abs(angle) * 100 / 3.14
     print(motor_left, motor_right)
     if forward:
-        motor1.forward(motor_left)
-        motor2.forward(motor_right)
+        fwd(motor_left, motor_right)
     elif backward:
-        motor1.backward(motor_left)
-        motor2.backward(motor_right)
+        bwd(motor_left, motor_right)
     else:
-        motor1.stop()
-        motor2.stop()
+        stop()
     
 def nn_drive(motorLeft: float, motorRight: float, Mode : Go=0):
     if Mode == 1:
-        motor1.forward(motorLeft)
-        motor2.forward(motorRight)
+        fwd(motorLeft, motorRight)
     elif Mode == 2:
-        motor1.backward(motorLeft)
-        motor2.backward(motorRight)
+        fwd(motorLeft, motorRight)
     else:
-        motor1.stop()
-        motor2.stop()
+        stop()
 
 
 

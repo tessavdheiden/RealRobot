@@ -2,7 +2,7 @@ import time
 import logging
 import support.firebase as fbdb
 import support.util as util
-import support.gps_drive as gps_drive
+#import support.gps_drive as gps_drive
 
 from support.gps import GPS
 from support.controller import Controller
@@ -125,7 +125,7 @@ def main(mode=None):
                             last_pos_x = robot_pos_x
                             last_pos_y = robot_pos_y
 
-                            if episode.step_number == TIME_OUT_TIME * FPS_EPISODE:
+                            if episode.step_number >= TIME_OUT_TIME * FPS_EPISODE:
                                 episode.uploadToServer(ending_message='Timeout')
                                 break
         if mode == 'FreeMode':
@@ -135,7 +135,7 @@ def main(mode=None):
                     time.sleep(sleep_time)
                 if controller.is_ready:
                     print(controller.a, controller.b, controller.degree)
-                    gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
+                    #gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 db = fbdb.db
 
-episode_key = '-LqQvV_oSZKvMxu4e6Jt'
+episode_key = '-LrifKRymVM3VEXXust_'
 
 goal_x = None
 goal_y = None

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 db = fbdb.db
 
-episode_key = '-LrifKRymVM3VEXXust_'
+episode_key = '-LrijYL5Wpn5O00ifspU'
 
 goal_x = None
 goal_y = None
@@ -21,5 +21,6 @@ if data:
     positions_y = data['positions_y']
     velocities_x = data['velocities_x']
     velocities_y = data['velocities_y']
-    plt.plot(positions_x, positions_y)
+    plt.scatter(positions_x, positions_y)
+    plt.axis('square')
     plt.show()

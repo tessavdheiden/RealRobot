@@ -2,7 +2,7 @@ import time
 import logging
 import support.firebase as fbdb
 import support.util as util
-#import support.gps_drive as gps_drive
+import support.gps_drive as gps_drive
 
 from support.gps import GPS
 from support.controller import Controller
@@ -13,7 +13,7 @@ db = fbdb.db
 
 FPS_EPISODE = 0.5
 FPS_CONTROLLER = 10
-TIME_OUT_TIME = 25
+TIME_OUT_TIME = 40
 
 load_value_network = False
 
@@ -131,11 +131,11 @@ def main(mode=None):
         if mode == 'FreeMode':
             while True:
                 sleep_time = 1. / FPS_CONTROLLER
-                if sleep_time > 0:
-                    time.sleep(sleep_time)
+                """ if sleep_time > 0:
+                    time.sleep(sleep_time) """
                 if controller.is_ready:
                     print(controller.a, controller.b, controller.degree)
-                    #gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
+                    gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
 
 
 if __name__ == '__main__':

@@ -3,6 +3,7 @@ import logging
 import support.firebase as fbdb
 import support.util as util
 import support.gps_drive as gps_drive
+import support.encoders as encoders
 
 from support.gps import GPS
 from support.controller import Controller
@@ -36,6 +37,9 @@ robot_latitude = 0.0
 
 init_robot_x = None
 init_robot_y = None
+
+t = time.clock()
+t0 = t
 
 def main(mode=None):
     while True:
@@ -130,8 +134,14 @@ def main(mode=None):
                                 break
         if mode == 'FreeMode':
             while True:
-                sleep_time = 1. / FPS_CONTROLLER
-                """ if sleep_time > 0:
+                global t
+                global t0
+                if (t - t0) >= 1:
+                    print("RPM-Left: %d RPM-Right: %d", encoders.RPM_L(), encoders.RPM_R())
+                    t = t0
+
+                """ sleep_time = 1. / FPS_CONTROLLER
+                if sleep_time > 0:
                     time.sleep(sleep_time) """
                 if controller.is_ready:
                     print(controller.a, controller.b, controller.degree)

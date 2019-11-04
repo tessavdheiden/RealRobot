@@ -45,19 +45,35 @@ def WheelR():
         sys.stdout.flush()
         CurRotR = 0
 
+def RPM_R():
+    timestep = 0.2
+    rot = 0
+    t = time.clock()
+    while t <= timestep:
+        if InR == 0 and LastR == 1:
+            rot += 1
+    rpm = rot * 60/(timestep * 20)
+    return rpm
+
+def RPM_L():
+    timestep = 0.2
+    rot = 0
+    t = time.clock()
+    while t <= timestep:
+        if InR == 0 and LastR == 1:
+            rot += 1
+    rpm = rot * 60/(timestep * 20)
+    return rpm
+
 while Running:
     InL = GPIO.input(EncodeL)
     InR = GPIO.input(EncodeR)
 
     if InL == 0 and LastL == 1:
         WheelL()
-        sys.stdout.write("L\n")
-        sys.stdout.flush()
 
     if InR == 0 and LastR == 1:
         WheelR()
-        sys.stdout.write("R\n")
-        sys.stdout.flush()
 
     LastL = InL
     LastR = InR

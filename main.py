@@ -38,8 +38,7 @@ robot_latitude = 0.0
 init_robot_x = None
 init_robot_y = None
 
-t = time.clock()
-t0 = t
+t = time.time()
 
 def main(mode=None):
     while True:
@@ -135,16 +134,15 @@ def main(mode=None):
         if mode == 'FreeMode':
             while True:
                 global t
-                global t0
-                if (t - t0) >= 1:
-                    print("RPM-Left: %d RPM-Right: %d", encoders.RPM_L(), encoders.RPM_R())
-                    t = t0
-
+                encoders.RPM()
+                if (time.time() - t) >= 1:
+                    print("RPM-Left:",encoders.rpm_l, "RPM-Right:", encoders.rpm_r)
+                    t = time.time()
                 """ sleep_time = 1. / FPS_CONTROLLER
                 if sleep_time > 0:
                     time.sleep(sleep_time) """
                 if controller.is_ready:
-                    print(controller.a, controller.b, controller.degree)
+                    #print(controller.a, controller.b, controller.degree)
                     gps_drive.joystick_drive(controller.degree, controller.a, controller.b)
 
 

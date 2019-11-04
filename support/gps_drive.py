@@ -12,9 +12,8 @@ in1a = 27
 in2a = 17
 ena = 13
 
-GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
-
+GPIO.setwarnings(False)
 GPIO.setup
 
 GPIO.setup(in1b, GPIO.OUT)
@@ -103,7 +102,7 @@ def joystick_drive(angle: float, forward: bool, backward: bool):
         motor_left -= abs(angle) * 100 / 3.14
     elif angle > 0.0:
         motor_right -= abs(angle) * 100 / 3.14
-    print(motor_left, motor_right)
+    #print(motor_left, motor_right)
     if forward:
         fwd(motor_left, motor_right)
     elif backward:

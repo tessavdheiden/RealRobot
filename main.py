@@ -3,8 +3,9 @@ import logging
 import support.firebase as fbdb
 import support.util as util
 import support.gps_drive as gps_drive
-import support.encoders as encoders
 
+#from multiprocessing import Process
+from support.encoders import main
 from support.gps import GPS
 from support.controller import Controller
 from model.episode import Episode
@@ -134,9 +135,8 @@ def main(mode=None):
         if mode == 'FreeMode':
             while True:
                 global t
-                encoders.RPM()
                 if (time.time() - t) >= 1:
-                    print("RPM-Left:",encoders.rpm_l, "RPM-Right:", encoders.rpm_r)
+                    #print("RPM-Left:", encoders.rpm_l, "RPM-Right:", encoders.rpm_r)
                     t = time.time()
                 """ sleep_time = 1. / FPS_CONTROLLER
                 if sleep_time > 0:
@@ -148,3 +148,5 @@ def main(mode=None):
 
 if __name__ == '__main__':
     main()
+    #Process(target=main).start()
+    #Process(target=encoders.main).start()

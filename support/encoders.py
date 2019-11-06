@@ -50,51 +50,48 @@ def WheelR():
         sys.stdout.flush()
         CurRotR = 0
 
-def RPM():
-    EncodeL = 2
-    EncodeR = 3
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(EncodeL, GPIO.IN)
-    GPIO.setup(EncodeR, GPIO.IN)
-    GPIO.setwarnings(False)
+def main():
+    while Running:
+        """InL = GPIO.input(EncodeL)
+        InR = GPIO.input(EncodeR)
 
-    
-    global InR
-    global LastR
-    InR = GPIO.input(EncodeR)
-    global InL
-    global LastL
-    InL = GPIO.input(EncodeL)
-    global t
-    global rpm_r
-    global rpm_l
-    timestep = 0.8
-    rot_r = 0
-    rot_l = 0
-    while time.time()-timestep <= t:
-        if InR == 0 and LastR == 1:
-            rot_r += 1
         if InL == 0 and LastL == 1:
-            rot_l += 1
-        LastR = InR
+            WheelL()
+
+        if InR == 0 and LastR == 1:
+            WheelR()
+            print("DEBUG")
+
         LastL = InL
-    t = time.time()
-    rpm_r = rot_r * 60/(timestep * 20)
-    rpm_l = rot_l * 60/(timestep * 20)
-    print(rpm_r)
+        LastR = InR"""
+        
+        # RPM
+        t = time.time()
+        LastL = 0
+        LastR = 0
+        
+        timestep = 1
+        rot_r = 0
+        rot_l = 0
+        while time.time()-timestep <= t:
+            InL = GPIO.input(EncodeL)
+            InR = GPIO.input(EncodeR)
+            if InR == 0 and LastR == 1:
+                rot_r += 1
+            if InL == 0 and LastL == 1:
+                rot_l += 1
+            LastR = InR
+            LastL = InL
+        t = time.time()
+        rpm_r = rot_r * 60/(timestep * 20)
+        rpm_l = rot_l * 60/(timestep * 20)
+        data = [rot_l, rot_r]
+        print(data)
 
-"""while Running:
-    InL = GPIO.input(EncodeL)
-    InR = GPIO.input(EncodeR)
 
-    if InL == 0 and LastL == 1:
-        WheelL()
+if __name__ == '__main__':
+    main()
 
-    if InR == 0 and LastR == 1:
-        WheelR()
-
-    LastL = InL
-    LastR = InR"""
 
 GPIO.cleanup()
